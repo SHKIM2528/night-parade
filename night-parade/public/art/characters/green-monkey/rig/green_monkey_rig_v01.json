@@ -1,0 +1,453 @@
+{
+  "version": 1,
+  "canvas": {
+    "width": 1450,
+    "height": 1450
+  },
+  "mode": "single-texture mesh rig with weighted deformation; separate pupil overlays only",
+  "bones": [
+    {
+      "id": "root",
+      "parent": null,
+      "pivot": [
+        0.505,
+        0.585
+      ],
+      "range": {
+        "x": 12,
+        "y": 10,
+        "rotation_deg": 2.0,
+        "scale": 0.015
+      },
+      "lag_ms": 0
+    },
+    {
+      "id": "torso",
+      "parent": "root",
+      "pivot": [
+        0.535,
+        0.475
+      ],
+      "range": {
+        "x": 7,
+        "y": 8,
+        "rotation_deg": 2.5,
+        "scale": 0.025
+      },
+      "lag_ms": 80
+    },
+    {
+      "id": "head",
+      "parent": "torso",
+      "pivot": [
+        0.405,
+        0.365
+      ],
+      "range": {
+        "x": 10,
+        "y": 8,
+        "rotation_deg": 4.0,
+        "scale": 0.018
+      },
+      "lag_ms": 45
+    },
+    {
+      "id": "face",
+      "parent": "head",
+      "pivot": [
+        0.35,
+        0.445
+      ],
+      "range": {
+        "x": 5,
+        "y": 4,
+        "rotation_deg": 1.8,
+        "scale": 0.01
+      },
+      "lag_ms": 25
+    },
+    {
+      "id": "eye_left",
+      "parent": "face",
+      "pivot": [
+        0.3,
+        0.42
+      ],
+      "range": {
+        "x": 7,
+        "y": 5,
+        "rotation_deg": 0,
+        "scale": 0
+      },
+      "lag_ms": 0
+    },
+    {
+      "id": "eye_right",
+      "parent": "face",
+      "pivot": [
+        0.355,
+        0.418
+      ],
+      "range": {
+        "x": 7,
+        "y": 5,
+        "rotation_deg": 0,
+        "scale": 0
+      },
+      "lag_ms": 0
+    },
+    {
+      "id": "front_arm",
+      "parent": "torso",
+      "pivot": [
+        0.47,
+        0.505
+      ],
+      "range": {
+        "x": 8,
+        "y": 10,
+        "rotation_deg": 5.0,
+        "scale": 0.012
+      },
+      "lag_ms": 130
+    },
+    {
+      "id": "bag",
+      "parent": "root",
+      "pivot": [
+        0.33,
+        0.61
+      ],
+      "range": {
+        "x": 14,
+        "y": 10,
+        "rotation_deg": 3.5,
+        "scale": 0.01
+      },
+      "lag_ms": 180
+    },
+    {
+      "id": "leg_left",
+      "parent": "root",
+      "pivot": [
+        0.46,
+        0.66
+      ],
+      "range": {
+        "x": 7,
+        "y": 12,
+        "rotation_deg": 6.0,
+        "scale": 0.01
+      },
+      "lag_ms": 100
+    },
+    {
+      "id": "leg_right",
+      "parent": "root",
+      "pivot": [
+        0.6,
+        0.665
+      ],
+      "range": {
+        "x": 7,
+        "y": 12,
+        "rotation_deg": 6.0,
+        "scale": 0.01
+      },
+      "lag_ms": 140
+    },
+    {
+      "id": "fur_secondary",
+      "parent": "head",
+      "pivot": [
+        0.455,
+        0.32
+      ],
+      "range": {
+        "x": 5,
+        "y": 6,
+        "rotation_deg": 3.0,
+        "scale": 0.01
+      },
+      "lag_ms": 220
+    },
+    {
+      "id": "robe_secondary",
+      "parent": "torso",
+      "pivot": [
+        0.65,
+        0.53
+      ],
+      "range": {
+        "x": 7,
+        "y": 8,
+        "rotation_deg": 3.0,
+        "scale": 0.01
+      },
+      "lag_ms": 200
+    }
+  ],
+  "influence_regions": {
+    "head": [
+      [
+        360,
+        280
+      ],
+      [
+        705,
+        265
+      ],
+      [
+        800,
+        375
+      ],
+      [
+        770,
+        520
+      ],
+      [
+        625,
+        610
+      ],
+      [
+        430,
+        610
+      ],
+      [
+        345,
+        500
+      ]
+    ],
+    "face": [
+      [
+        345,
+        500
+      ],
+      [
+        615,
+        505
+      ],
+      [
+        665,
+        650
+      ],
+      [
+        575,
+        730
+      ],
+      [
+        405,
+        710
+      ],
+      [
+        340,
+        625
+      ]
+    ],
+    "torso": [
+      [
+        585,
+        380
+      ],
+      [
+        905,
+        360
+      ],
+      [
+        1010,
+        460
+      ],
+      [
+        1005,
+        825
+      ],
+      [
+        790,
+        900
+      ],
+      [
+        610,
+        760
+      ],
+      [
+        570,
+        560
+      ]
+    ],
+    "front_arm": [
+      [
+        590,
+        625
+      ],
+      [
+        770,
+        590
+      ],
+      [
+        850,
+        675
+      ],
+      [
+        820,
+        820
+      ],
+      [
+        670,
+        865
+      ],
+      [
+        585,
+        755
+      ]
+    ],
+    "bag": [
+      [
+        210,
+        585
+      ],
+      [
+        455,
+        580
+      ],
+      [
+        610,
+        680
+      ],
+      [
+        690,
+        885
+      ],
+      [
+        550,
+        1015
+      ],
+      [
+        330,
+        1045
+      ],
+      [
+        225,
+        900
+      ]
+    ],
+    "leg_left": [
+      [
+        575,
+        790
+      ],
+      [
+        750,
+        790
+      ],
+      [
+        790,
+        955
+      ],
+      [
+        725,
+        1120
+      ],
+      [
+        590,
+        1105
+      ],
+      [
+        560,
+        920
+      ]
+    ],
+    "leg_right": [
+      [
+        715,
+        790
+      ],
+      [
+        960,
+        790
+      ],
+      [
+        990,
+        965
+      ],
+      [
+        925,
+        1115
+      ],
+      [
+        790,
+        1115
+      ],
+      [
+        745,
+        955
+      ]
+    ],
+    "fur_secondary": [
+      [
+        410,
+        300
+      ],
+      [
+        720,
+        285
+      ],
+      [
+        770,
+        390
+      ],
+      [
+        690,
+        505
+      ],
+      [
+        520,
+        525
+      ],
+      [
+        400,
+        440
+      ]
+    ],
+    "robe_secondary": [
+      [
+        730,
+        390
+      ],
+      [
+        975,
+        390
+      ],
+      [
+        1005,
+        790
+      ],
+      [
+        840,
+        905
+      ],
+      [
+        730,
+        820
+      ]
+    ]
+  },
+  "z_order": [
+    "bag",
+    "leg_right",
+    "leg_left",
+    "torso",
+    "front_arm",
+    "head",
+    "face",
+    "eye_left",
+    "eye_right",
+    "fur_secondary",
+    "robe_secondary"
+  ],
+  "motion_notes": {
+    "idle": "root sway 0.7–1.1s; torso breath 4.8s; head follows pointer with clamp",
+    "lantern_freeze": "all spring velocities decay to zero over 320–480ms; depth shadow goes to zero",
+    "escape": "root translates toward camera; bag and fur lag; legs alternate with 90ms phase offset",
+    "do_not": "avoid large joint rotations until hidden anatomy is generated"
+  }
+}

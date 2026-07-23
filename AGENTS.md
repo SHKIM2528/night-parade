@@ -14,7 +14,28 @@ NIGHT PARADE — an immersive interactive handscroll.
 6. Preserve source/license records.
 7. Stop after producing the exact artifacts requested by the active gate.
 
-## Current status
+## Active gate
 
-No implementation gate is active yet.
-Asset preparation only.
+`docs/gates/GATE_01_LANTERN_HERO.md`
+
+Only improve the full-viewport green-monkey lantern scene.
+
+Do not add:
+
+- more creatures;
+- horizontal scroll navigation;
+- audio;
+- backend or saved seals;
+- framework migrations;
+- generic particle effects;
+- unrelated landing-page sections.
+
+## Visual priority
+
+The light/dark boundary must read immediately:
+
+- light = unchanged historical image;
+- dark = layered living creature;
+- no rigid whole-character sticker;
+- no black bars or card-like scroll container;
+- no low-resolution selection-mask edges.
