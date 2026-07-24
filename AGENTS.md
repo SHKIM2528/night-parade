@@ -16,19 +16,16 @@ NIGHT PARADE — an immersive interactive handscroll.
 
 ## Active gate
 
-`docs/gates/GATE_01_V06_CUTOUT_PUPPET.md`
-
-Only improve the full-viewport green-monkey lantern scene.
+`docs/gates/GATE_02_V01_UNROLL.md`
 
 ## Visual priority
 
-- light = untouched historical image;
-- dark = nine visibly articulated paper parts;
-- face, head, fur, arm, robe, torso, legs, and bag must not move as one lenticular sheet;
-- use only the original painted eyes;
-- a fast light pass must produce readable recoil;
-- every raised part must collapse exactly into the scan under light;
-- upper-left marker must show `GATE 01 · V06 · WEBGL2-CUTOUT`;
-- no duplicated edge, hard rectangular crop, black bar, or low-resolution mask breakup.
+- the green-monkey close-up must visibly become one fragment of a longer handscroll;
+- the scroll itself is the navigation system;
+- drag and wheel input must carry weight, lag, inertia, and paper curvature;
+- the lantern continues across the full scroll;
+- no generic horizontal carousel, card rail, black bars, or conventional webpage sections;
+- upper-left marker must show the exact gate and renderer;
+- preserve V06 as the close-up hero while Gate 02 is reviewed.
 
-The full scroll is reserved for `UNROLL` after this gate passes.
+Do not add more fully rigged creatures, sound, backend, archive, user seals, or dawn until UNROLL passes.
