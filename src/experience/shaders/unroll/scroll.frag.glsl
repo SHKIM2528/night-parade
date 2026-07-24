@@ -50,12 +50,11 @@ float fbm(vec2 p) {
 
 vec3 nightGrade(vec3 color) {
   float luma = dot(color, vec3(.299, .587, .114));
-  vec3 restrained = mix(vec3(luma), color, .42);
-  return restrained * vec3(.285, .335, .342) + vec3(.004, .010, .012);
+  vec3 restrained = mix(vec3(luma), color, .58);
+  // The scroll must remain readable in darkness. V02 crushed the paper almost to black.
+  return restrained * vec3(.54, .60, .59) + vec3(.018, .028, .027);
 }
 
-/* V02 deliberately uses the complete overview for navigation. The optional right-half
-   master will return as a correctly registered tile instead of overriding half the scroll. */
 vec3 sampleScroll(vec2 uv) {
   return texture(uScroll, clamp(uv, 0.0, 1.0)).rgb;
 }
@@ -93,38 +92,40 @@ void main() {
 
   vec3 original = sampleScroll(uv);
   vec3 smear = sampleScroll(smearUv);
-  original = mix(original, smear, min(.40, abs(velocity) * .10));
+  original = mix(original, smear, min(.32, abs(velocity) * .085));
 
   vec2 lamp = screen - uLantern;
   lamp.x *= viewportAspect;
   float lampAngle = atan(lamp.y, lamp.x);
   float contour = 1.0 + .050 * sin(lampAngle * 3.0 + .8) + .024 * sin(lampAngle * 7.0 - 1.4);
-  float fiber = (fbm(uv * vec2(22.0, 92.0) + vec2(uTime * .008, 0.0)) - .5) * .065;
-  float lampDistance = length(lamp / vec2(.335 + abs(velocity) * .018, .36)) / contour + fiber;
-  float light = 1.0 - smoothstep(.42, 1.02, lampDistance);
-  float halo = 1.0 - smoothstep(.78, 1.35, lampDistance);
+  float fiber = (fbm(uv * vec2(22.0, 92.0) + vec2(uTime * .008, 0.0)) - .5) * .055;
+  float lampDistance = length(lamp / vec2(.37 + abs(velocity) * .018, .40)) / contour + fiber;
+  float light = 1.0 - smoothstep(.40, 1.04, lampDistance);
+  float halo = 1.0 - smoothstep(.82, 1.42, lampDistance);
 
-  vec3 day = original * vec3(1.035, 1.018, .975) + vec3(.008, .004, 0.0);
+  vec3 day = original * vec3(1.028, 1.014, .982) + vec3(.006, .003, 0.0);
   vec3 night = nightGrade(original);
   vec3 color = mix(night, day, light);
-  color += halo * (1.0 - light) * vec3(.016, .009, .002);
+  color += halo * (1.0 - light) * vec3(.018, .011, .004);
 
-  float paperFiber = (fbm(uv * vec2(280.0, 74.0)) - .5) * .018;
-  color += paperFiber * mix(.22, 1.0, light);
+  float paperFiber = (fbm(uv * vec2(280.0, 74.0)) - .5) * .012;
+  color += paperFiber * mix(.45, 1.0, light);
 
   float fakeDepth = sin((screen.x - .5) * PI) * (.018 + drag * .035) + edgeCurl * .11;
   vec3 normal = normalize(vec3(-velocity * .10 - edgeCurl * .65, fakeDepth, 1.0));
   vec3 key = normalize(vec3(-.45, -.35, .88));
-  color *= .94 + max(dot(normal, key), 0.0) * .12;
+  color *= .97 + max(dot(normal, key), 0.0) * .08;
 
   float topEdge = 1.0 - smoothstep(.0, .018, screen.y);
   float bottomEdge = smoothstep(.982, 1.0, screen.y);
-  color *= 1.0 - (topEdge + bottomEdge) * .15;
-  color += topEdge * vec3(.025, .020, .012);
+  color *= 1.0 - (topEdge + bottomEdge) * .08;
+  color += topEdge * vec3(.020, .017, .010);
 
-  float vignette = 1.0 - .16 * dot((screen - .5) / vec2(.72, .66), (screen - .5) / vec2(.72, .66));
+  float vignette = 1.0 - .075 * dot((screen - .5) / vec2(.74, .68), (screen - .5) / vec2(.74, .68));
   color *= vignette;
-  color += (hash21(gl_FragCoord.xy + floor(uTime * 18.0)) - .5) * .0045;
+  color += (hash21(gl_FragCoord.xy + floor(uTime * 18.0)) - .5) * .0035;
 
+  // Lift shadow values slightly for screen recordings and ordinary laptop displays.
+  color = pow(max(color, vec3(0.0)), vec3(.92));
   outColor = vec4(clamp(color, 0.0, 1.0), 1.0);
 }
