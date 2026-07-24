@@ -1,12 +1,12 @@
 {
   "name": "night-parade",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "scripts": {
     "predev": "node scripts/predev.mjs",
     "dev": "node scripts/dev-server.mjs",
     "start": "node scripts/dev-server.mjs",
-    "check": "node --check src/main.js && node --check src/fallback/canvas2d.js && node --check scripts/dev-server.mjs && node --check scripts/predev.mjs"
+    "check": "node --check src/main.js && node --check src/unroll.js && node --check src/fallback/canvas2d.js && node --check scripts/dev-server.mjs && node --check scripts/predev.mjs"
   }
 }
