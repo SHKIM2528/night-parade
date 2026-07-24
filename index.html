@@ -6,12 +6,15 @@
   <meta name="theme-color" content="#101719" />
   <title>NIGHT PARADE — The Scroll Wakes After Dark</title>
   <link rel="stylesheet" href="./src/styles/app.css" />
+  <link rel="stylesheet" href="./src/styles/unroll.css" />
 </head>
 <body>
   <main class="experience" aria-label="Interactive Night Parade handscroll">
+    <canvas id="scrollScene" aria-hidden="true"></canvas>
+    <div class="scroll-fallback" aria-hidden="true"></div>
     <canvas id="scene" aria-hidden="true"></canvas>
     <div class="grain" aria-hidden="true"></div>
-    <div class="build-tag" aria-hidden="true">GATE 01 · V06</div>
+    <div class="build-tag" aria-hidden="true">GATE 02 · V01 · HERO-CUTOUT</div>
 
     <header class="hud hud--top">
       <div class="brand">
@@ -30,6 +33,19 @@
       <button id="enter" type="button">ENTER AFTER DARK <span aria-hidden="true">↗</span></button>
     </footer>
 
+    <div class="unroll-hud" aria-hidden="true">
+      <div class="scroll-chapter">THE GREEN MONKEY</div>
+      <div class="scroll-progress">
+        <span class="scroll-progress__track"><i class="scroll-progress__fill"></i></span>
+        <span class="scroll-progress__label">72 / 100</span>
+      </div>
+      <div class="scroll-command">HOLD + DRAG <b>↔</b></div>
+    </div>
+    <div class="unroll-hint" aria-hidden="true">
+      <span>THE PAINTING IS ONLY A FRAGMENT</span>
+      <strong>DRAG TO UNROLL THE NIGHT</strong>
+    </div>
+
     <div class="cursor" id="cursor" aria-hidden="true"><span></span></div>
     <div class="loading" id="loading" role="status">AWAKENING THE SCROLL</div>
     <div class="fallback" id="fallback" hidden>
@@ -37,5 +53,6 @@
     </div>
   </main>
   <script type="module" src="./src/main.js"></script>
+  <script type="module" src="./src/unroll.js"></script>
 </body>
 </html>
