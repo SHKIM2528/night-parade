@@ -4,9 +4,9 @@ An interactive living handscroll in which light pins a yōkai back into its hist
 
 ## Current gate
 
-**Gate 01 V06 — Cutout Puppet**
+**Gate 02 V01 — UNROLL**
 
-V06 replaces the single blended deformation mesh with nine independently rendered paper parts. This is the last single-character technique gate before the full-scroll `UNROLL` stage.
+The accepted V06 cutout hero now pulls back to reveal the full historical handscroll. The user drags the paper itself with inertia while the lantern continues to expose the original pigment.
 
 ## Run
 
@@ -23,18 +23,18 @@ http://127.0.0.1:4173/
 
 ## Current implementation
 
-- primary WebGL2 articulated cutout renderer;
-- nine independent historical-paper parts using existing anatomical masks;
-- separate hinges, depth, edge thickness, contact shadows, wake/freeze timing, and recoil;
-- original painted-eye tracking, blink, jaw pulse, torso breathing, arm swing, robe bend, and delayed fur;
-- irregular motion-stretched lantern boundary;
-- exact source scan under light and user-prepared clean plate in darkness;
-- WebGL1 and Canvas2D compatibility paths retained;
+- V06 nine-part WebGL2 cutout puppet retained as the opening close-up;
+- separate WebGL full-scroll renderer using runtime image dimensions;
+- horizontal drag and wheel navigation with inertia;
+- paper bend, edge curl, velocity ink smear, and fiber-scattered lantern;
+- optional high-resolution right-half texture blended over the overview;
+- live progress and chapter labels;
+- WebGL1 scroll compatibility and CSS image fallback;
 - persistent upper-left gate/renderer marker;
 - safe `predev` Git refresh on clean `main`.
 
 ## Gate rule
 
-Do not add a second creature, full-scroll navigation, sound, backend, archive, or decorative particles until V06 motion is reviewed.
+Do not add more hero rigs, audio, backend, archive, user seals, or dawn until the close-up-to-full-scroll transition and direct paper navigation pass visual review.
 
-Review instructions: `docs/gates/GATE_01_V06_CUTOUT_PUPPET.md`.
+Review instructions: `docs/gates/GATE_02_V01_UNROLL.md`.
