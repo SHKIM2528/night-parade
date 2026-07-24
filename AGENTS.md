@@ -16,7 +16,7 @@ NIGHT PARADE — an immersive interactive handscroll.
 
 ## Active gate
 
-`docs/gates/GATE_01_V04_AWAKENING.md`
+`docs/gates/GATE_01_V05_ARTICULATION.md`
 
 Only improve the full-viewport green-monkey lantern scene.
 
@@ -35,9 +35,12 @@ Do not add:
 The light/dark boundary must read immediately:
 
 - light = unchanged historical image;
-- dark = deformable creature lifted from the paper;
-- eyes acquire the lantern before the body wakes;
-- face, fur, arm, robe, and torso move with different delay and curvature;
-- a fast light pass produces recoil and a paper-tension ripple;
+- dark = visibly articulated creature lifted from the paper;
+- use the original painted eyes only; never draw duplicate synthetic pupils;
+- face, head, fur, arm, robe, torso, jaw, and breathing must not move as one blended lenticular surface;
+- a fast light pass produces a readable recoil and paper-tension ripple;
 - light collapses the mesh precisely into the source painting;
+- every review recording must show the exact gate and renderer in the upper-left;
 - no rigid whole-character sticker, duplicated edge, black bars, or low-resolution mask breakup.
+
+The full scroll is reserved for `UNROLL` after V05 passes.
