@@ -1,0 +1,109 @@
+/* Gate 02 V01 — the close-up becomes a physically draggable full handscroll. */
+#scrollScene,
+.scroll-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.05s cubic-bezier(.22,.72,.18,1);
+}
+.scroll-fallback {
+  background:
+    linear-gradient(90deg, rgba(12,20,21,.32), transparent 12%, transparent 88%, rgba(12,20,21,.32)),
+    url("../../public/art/master-scroll/tosa_mitsuoki_hyakki_yako_all_1400.jpg") 72% 50% / auto 100% no-repeat,
+    #d9cfb3;
+}
+.scroll-fallback.is-visible { display: block; }
+#scene {
+  z-index: 1;
+  transform-origin: 50% 50%;
+  transition:
+    transform 1.1s cubic-bezier(.22,.72,.18,1),
+    opacity .92s cubic-bezier(.22,.72,.18,1),
+    filter 1.1s ease;
+}
+.experience.is-unrolling #scrollScene,
+.experience.is-unrolling .scroll-fallback { opacity: 1; }
+.experience.is-unrolling #scene {
+  transform: perspective(1100px) translate3d(0,-1.5vh,0) rotateX(3.2deg) scale(.82);
+  opacity: 0;
+  filter: drop-shadow(0 34px 44px rgba(2,8,9,.46)) saturate(.86);
+}
+.experience.is-unrolled #scene { visibility: hidden; }
+.experience.is-unrolling .hud,
+.experience.is-unrolling .seal { opacity: 0 !important; }
+.experience.is-unrolling .cursor { opacity: .62 !important; }
+.experience.is-grabbing .cursor { transform: translate3d(var(--cursor-x,0),var(--cursor-y,0),0) translate(-50%,-50%) scale(.72); }
+
+.unroll-hud {
+  position: absolute;
+  z-index: 4;
+  left: 34px;
+  right: 34px;
+  bottom: 27px;
+  display: grid;
+  grid-template-columns: minmax(180px,1fr) minmax(240px,42vw) minmax(180px,1fr);
+  align-items: end;
+  gap: 26px;
+  color: rgba(232,225,204,.78);
+  font-size: 10px;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity .65s ease .48s, transform .65s ease .48s;
+}
+.experience.is-unrolling .unroll-hud { opacity: 1; transform: none; }
+.scroll-chapter { white-space: nowrap; }
+.scroll-command { justify-self: end; white-space: nowrap; }
+.scroll-command b { padding-left: 12px; color: rgba(245,220,158,.92); font-weight: 400; }
+.scroll-progress { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 13px; }
+.scroll-progress__track { position: relative; display: block; height: 1px; background: rgba(232,225,204,.18); overflow: hidden; }
+.scroll-progress__fill { position: absolute; inset: 0; transform: scaleX(.72); transform-origin: left center; background: rgba(239,221,173,.78); }
+.scroll-progress__label { min-width: 54px; text-align: right; }
+
+.unroll-hint {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  bottom: 92px;
+  display: grid;
+  gap: 7px;
+  min-width: 310px;
+  transform: translate(-50%,15px);
+  text-align: center;
+  color: rgba(236,228,205,.72);
+  text-transform: uppercase;
+  letter-spacing: .075em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .55s ease, transform .55s ease;
+}
+.unroll-hint span { font-size: 9px; opacity: .58; }
+.unroll-hint strong { font-size: 12px; font-weight: 400; }
+.unroll-hint.is-visible { opacity: 1; transform: translate(-50%,0); }
+.unroll-hint.is-hidden,
+.experience.is-unrolling .unroll-hint { opacity: 0; transform: translate(-50%,10px); }
+
+@media (max-width: 700px) {
+  .unroll-hud {
+    left: 18px;
+    right: 18px;
+    bottom: 19px;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+  }
+  .scroll-progress { grid-column: 1 / -1; grid-row: 1; }
+  .scroll-chapter { grid-column: 1; grid-row: 2; }
+  .scroll-command { grid-column: 2; grid-row: 2; }
+  .unroll-hint { bottom: 78px; min-width: 280px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #scene, #scrollScene, .scroll-fallback, .unroll-hud, .unroll-hint { transition-duration: .01ms !important; }
+}
