@@ -48,3 +48,12 @@ button { font: inherit; }
 @media (prefers-reduced-motion: reduce) {
   .grain { animation: none; }
 }
+
+/* Gate 01 V03: keep the art dominant once the lantern is moving. */
+.hud { transition: opacity .55s ease; }
+.experience.is-engaged .hud--top { opacity: .68; }
+.experience.is-engaged .hud--bottom { opacity: .58; }
+.cursor { width: 14px; height: 14px; border-color: rgba(246,225,174,.30); }
+.cursor::before { width: 22px; }
+.cursor::after { height: 22px; }
+.cursor span { width: 3px; height: 3px; }

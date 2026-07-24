@@ -16,7 +16,7 @@ NIGHT PARADE — an immersive interactive handscroll.
 
 ## Active gate
 
-`docs/gates/GATE_01_LANTERN_HERO.md`
+`docs/gates/GATE_01_REVIEW_V03.md`
 
 Only improve the full-viewport green-monkey lantern scene.
 
