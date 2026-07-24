@@ -16,16 +16,18 @@ NIGHT PARADE — an immersive interactive handscroll.
 
 ## Active gate
 
-`docs/gates/GATE_02_V01_UNROLL.md`
+`docs/gates/GATE_02_V02_SEAMLESS_UNROLL.md`
 
 ## Visual priority
 
-- the green-monkey close-up must visibly become one fragment of a longer handscroll;
-- the scroll itself is the navigation system;
-- drag and wheel input must carry weight, lag, inertia, and paper curvature;
-- the lantern continues across the full scroll;
-- no generic horizontal carousel, card rail, black bars, or conventional webpage sections;
-- upper-left marker must show the exact gate and renderer;
-- preserve V06 as the close-up hero while Gate 02 is reviewed.
+- remove the V01 scale-and-fade crossfade completely;
+- the close-up must open along a visible paper seam and reveal the long scroll underneath;
+- the WebGL canvas must never be covered by the CSS fallback when WebGL works;
+- drag, wheel, touch, and keyboard input must visibly move the artwork;
+- progress must be computed from the actual navigable center range;
+- the lantern, paper bend, edge curl, and inertia continue across the full scroll;
+- upper-left marker must show `GATE 02 · V02 · UNROLL-WEBGL2` on the primary path.
 
-Do not add more fully rigged creatures, sound, backend, archive, user seals, or dawn until UNROLL passes.
+V06 is retained as a technique proof, not final hero animation. Do not keep squeezing final character quality from one flattened scan; final rigging requires separately prepared painted layers and reconstructed hidden anatomy.
+
+Do not add sound, backend, archive, user seals, or dawn until V02 passes.
