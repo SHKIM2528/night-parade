@@ -4,9 +4,9 @@ An interactive living handscroll in which light pins a yōkai back into its hist
 
 ## Current gate
 
-**Gate 02 V01 — UNROLL**
+**Gate 02 V02 — Seamless Unroll**
 
-The accepted V06 cutout hero now pulls back to reveal the full historical handscroll. The user drags the paper itself with inertia while the lantern continues to expose the original pigment.
+The V01 crossfade and frozen navigation were rejected. V02 opens the close-up with a directional paper seam and exposes the live WebGL handscroll underneath. Drag, wheel, touch, and keyboard input move through the real scroll range.
 
 ## Run
 
@@ -23,18 +23,22 @@ http://127.0.0.1:4173/
 
 ## Current implementation
 
-- V06 nine-part WebGL2 cutout puppet retained as the opening close-up;
-- separate WebGL full-scroll renderer using runtime image dimensions;
-- horizontal drag and wheel navigation with inertia;
+- V06 nine-part cutout puppet retained as the opening technique proof;
+- directional paper-seam transition instead of scale-and-fade crossfading;
+- WebGL full-scroll renderer using the complete overview texture;
+- pointer capture, touch-safe direct drag, wheel, keyboard, and release inertia;
+- movement clamped to the real visible span with truthful progress values;
 - paper bend, edge curl, velocity ink smear, and fiber-scattered lantern;
-- optional high-resolution right-half texture blended over the overview;
-- live progress and chapter labels;
-- WebGL1 scroll compatibility and CSS image fallback;
+- WebGL1 compatibility and a CSS fallback that is hidden whenever WebGL works;
 - persistent upper-left gate/renderer marker;
 - safe `predev` Git refresh on clean `main`.
 
+## Character-rig status
+
+V06 is not the final animation ceiling. It is the practical limit of deriving nine regions from one flattened scan. Final hero-quality motion requires separately prepared painted layers and reconstructed hidden anatomy.
+
 ## Gate rule
 
-Do not add more hero rigs, audio, backend, archive, user seals, or dawn until the close-up-to-full-scroll transition and direct paper navigation pass visual review.
+Do not add audio, backend, archive, user seals, or dawn until V02 transition and navigation pass visual review.
 
-Review instructions: `docs/gates/GATE_02_V01_UNROLL.md`.
+Review instructions: `docs/gates/GATE_02_V02_SEAMLESS_UNROLL.md`.
