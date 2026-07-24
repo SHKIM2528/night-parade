@@ -1,9 +1,24 @@
+const reportRuntimeError = (error) => {
+  const message = error instanceof Error ? `${error.message}\n${error.stack ?? ''}` : String(error);
+  console.error(error);
+  const loadingNode = document.querySelector('#loading');
+  if (loadingNode) {
+    loadingNode.textContent = message;
+    loadingNode.style.whiteSpace = 'pre-wrap';
+    loadingNode.style.padding = '32px';
+    loadingNode.style.fontSize = '12px';
+  }
+};
+addEventListener('error', (event) => reportRuntimeError(event.error ?? event.message));
+addEventListener('unhandledrejection', (event) => reportRuntimeError(event.reason));
+
 const canvas = document.querySelector('#scene');
 const loading = document.querySelector('#loading');
 const fallback = document.querySelector('#fallback');
 const cursor = document.querySelector('#cursor');
 const enter = document.querySelector('#enter');
 const experience = document.querySelector('.experience');
+const buildTag = document.querySelector('.build-tag');
 
 const params = new URLSearchParams(location.search);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 0;
@@ -26,9 +41,11 @@ if (!gl && requestedRenderer !== 'canvas2d') {
 }
 
 if (gl) {
-  canvas.dataset.renderer = isWebGL2 ? 'webgl2-mesh' : 'webgl1';
+  canvas.dataset.renderer = isWebGL2 ? 'webgl2-cutout' : 'webgl1';
   experience.dataset.renderer = canvas.dataset.renderer;
+  if (buildTag) buildTag.textContent = `GATE 01 · V06 · ${canvas.dataset.renderer.toUpperCase()}`;
 } else {
+  if (buildTag) buildTag.textContent = 'GATE 01 · V06 · CANVAS2D';
   const { startCanvasFallback } = await import('./fallback/canvas2d.js');
   await startCanvasFallback({ canvas, loading, fallback, cursor, enter, experience, params, reducedMotion });
 }
@@ -38,12 +55,10 @@ if (gl) {
   const forceAwake = params.has('awake');
   const captureLantern = params.get('lantern')?.split(',').map(Number);
 
-  function loadText(path) {
-    return fetch(path).then((response) => {
-      if (!response.ok) throw new Error(`Failed to load ${path}: ${response.status}`);
-      return response.text();
-    });
-  }
+  const loadText = (path) => fetch(path).then((response) => {
+    if (!response.ok) throw new Error(`Failed to load ${path}: ${response.status}`);
+    return response.text();
+  });
 
   function compile(type, source, label) {
     const shader = gl.createShader(type);
@@ -68,9 +83,9 @@ if (gl) {
     return program;
   }
 
-  function uniformMap(program, names) {
-    return Object.fromEntries(names.map((name) => [name, gl.getUniformLocation(program, name)]));
-  }
+  const uniformMap = (program, names) => Object.fromEntries(
+    names.map((name) => [name, gl.getUniformLocation(program, name)]),
+  );
 
   function loadImage(src) {
     return new Promise((resolve, reject) => {
@@ -86,7 +101,7 @@ if (gl) {
   const textureDefs = [
     ['uSource', './public/art/characters/green-monkey/source/green_monkey_source_context.png'],
     ['uClean', './public/art/clean-plates/green_monkey_clean_plate.png'],
-    ['uInk', './public/art/characters/green-monkey/cutouts/green_monkey_ink_only_rgba.png'],
+    ['uCutout', './public/art/characters/green-monkey/cutouts/green_monkey_ink_only_rgba.png'],
     ['uRegionsA', './public/art/characters/green-monkey/masks/green_monkey_regions_a_v02.png'],
     ['uRegionsB', './public/art/characters/green-monkey/masks/green_monkey_regions_b_v02.png'],
     ['uRegionsC', './public/art/characters/green-monkey/masks/green_monkey_regions_c_v02.png'],
@@ -122,14 +137,15 @@ if (gl) {
   let baseProgram;
   let baseUniforms;
   let baseVao;
-  let meshProgram;
-  let meshUniforms;
-  let meshVao;
-  let meshIndexCount = 0;
+  let puppetProgram;
+  let puppetUniforms;
+  let puppetVao;
+  let puppetIndexCount = 0;
+
   const fullVertexSource = await loadText('./src/experience/shaders/lantern/hero.vert.glsl');
 
   if (isWebGL2) {
-    const [baseFragmentSource, creatureVertexSource, creatureFragmentSource] = await Promise.all([
+    const [baseFragmentSource, puppetVertexSource, puppetFragmentSource] = await Promise.all([
       loadText('./src/experience/shaders/lantern/hero-base.frag.glsl'),
       loadText('./src/experience/shaders/lantern/creature.vert.glsl'),
       loadText('./src/experience/shaders/lantern/creature.frag.glsl'),
@@ -148,11 +164,11 @@ if (gl) {
     gl.enableVertexAttribArray(basePosition);
     gl.vertexAttribPointer(basePosition, 2, gl.FLOAT, false, 0, 0);
 
-    meshProgram = createProgram(creatureVertexSource, creatureFragmentSource, 'deformable creature');
-    meshUniforms = uniformMap(meshProgram, [...commonUniformNames, 'uPass']);
-    bindSamplerUnits(meshProgram);
+    puppetProgram = createProgram(puppetVertexSource, puppetFragmentSource, 'articulated cutout puppet');
+    puppetUniforms = uniformMap(puppetProgram, [...commonUniformNames, 'uPass', 'uPart']);
+    bindSamplerUnits(puppetProgram);
 
-    const segments = innerWidth < 720 ? 96 : 128;
+    const segments = innerWidth < 720 ? 72 : 104;
     const vertices = new Float32Array((segments + 1) * (segments + 1) * 2);
     let vertexOffset = 0;
     for (let y = 0; y <= segments; y += 1) {
@@ -174,14 +190,14 @@ if (gl) {
         indices[indexOffset++] = b; indices[indexOffset++] = c; indices[indexOffset++] = d;
       }
     }
-    meshIndexCount = indices.length;
+    puppetIndexCount = indices.length;
 
-    meshVao = gl.createVertexArray();
-    gl.bindVertexArray(meshVao);
+    puppetVao = gl.createVertexArray();
+    gl.bindVertexArray(puppetVao);
     const gridBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, gridBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-    const artUvAttribute = gl.getAttribLocation(meshProgram, 'aArtUv');
+    const artUvAttribute = gl.getAttribLocation(puppetProgram, 'aArtUv');
     gl.enableVertexAttribArray(artUvAttribute);
     gl.vertexAttribPointer(artUvAttribute, 2, gl.FLOAT, false, 0, 0);
     const indexBuffer = gl.createBuffer();
@@ -221,17 +237,17 @@ if (gl) {
     velocity: { x: 0, y: 0 }, lastTarget: { ...initial }, wakes: new Float32Array(9),
     intro: forceAwake ? 1 : 0, entered: forceAwake, shock: params.has('recoil') ? 1 : 0,
     pinPulse: 0, previousFaceLight: forceAwake ? 0 : 1, previousFaceWake: forceAwake ? 1 : 0,
-    awakeningClock: forceAwake ? .34 : 99, awakeningCooldown: 0, moved: false,
+    awakeningClock: forceAwake ? .34 : 99, awakeningCooldown: 0,
   };
   if (forceAwake) state.wakes.fill(1);
 
   const regionPivots = [
     [.2674, .5764], [.4585, .6727], [.6025, .6766], [.5915, .3440], [.6117, .4020],
-    [.4719, .4944], [.3341, .2558], [.3734, .2608], [.3220, .4236],
+    [.4719, .4944], [.3341, .2558], [.3734, .2608], [.3420, .4500],
   ];
-  const wakeRates = [2.1, 2.4, 2.5, 3.0, 3.25, 4.25, 6.4, 4.8, 10.8];
-  const freezeRates = [8.2, 8.4, 8.7, 9.1, 9.8, 12.5, 15.0, 13.2, 19.0];
-  const globalWakeWeights = [.35, .42, .42, .72, .80, .95, 1.15, 1.05, 1.25];
+  const wakeRates = [1.7, 2.0, 2.1, 2.6, 2.9, 4.2, 5.8, 3.7, 9.0];
+  const freezeRates = [8.2, 8.6, 8.8, 9.4, 10.2, 13.4, 16.0, 13.8, 20.0];
+  const globalWakeWeights = [.32, .38, .38, .68, .78, .98, 1.14, 1.02, 1.30];
 
   function smoothstep(edge0, edge1, value) {
     const t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
@@ -248,7 +264,7 @@ if (gl) {
     const dx = (screenPoint.x - state.lantern.x) * aspect;
     const dy = screenPoint.y - state.lantern.y;
     const speed = Math.min(Math.hypot(state.velocity.x * aspect, state.velocity.y), 2.65);
-    const d = Math.hypot(dx / (.292 + speed * .026), dy / (.318 - Math.min(speed, 1.5) * .012));
+    const d = Math.hypot(dx / (.286 + speed * .030), dy / (.315 - Math.min(speed, 1.5) * .013));
     return 1 - smoothstep(.50, 1.04, d);
   }
 
@@ -256,7 +272,6 @@ if (gl) {
     if (freezeFrame) return;
     state.target.x = clientX / innerWidth;
     state.target.y = clientY / innerHeight;
-    state.moved = true;
     experience.classList.add('is-engaged');
     cursor.style.transform = `translate3d(${clientX}px, ${clientY}px, 0) translate(-50%, -50%)`;
     cursor.style.opacity = '1';
@@ -272,7 +287,9 @@ if (gl) {
     const width = Math.max(1, Math.round(innerWidth * dpr));
     const height = Math.max(1, Math.round(innerHeight * dpr));
     if (canvas.width !== width || canvas.height !== height) {
-      canvas.width = width; canvas.height = height; gl.viewport(0, 0, width, height);
+      canvas.width = width;
+      canvas.height = height;
+      gl.viewport(0, 0, width, height);
     }
   }
   addEventListener('resize', resize, { passive: true });
@@ -282,9 +299,9 @@ if (gl) {
   gl.disable(gl.CULL_FACE);
 
   function awakeningEnvelope(time) {
-    if (time < 0 || time > 1.55) return 0;
-    if (time < .28) return Math.sin((time / .28) * Math.PI * .5);
-    return Math.exp(-(time - .28) * 1.72) * (1 + Math.sin((time - .28) * 9.0) * .055);
+    if (time < 0 || time > 1.7) return 0;
+    if (time < .32) return Math.sin((time / .32) * Math.PI * .5);
+    return Math.exp(-(time - .32) * 1.46) * (1 + Math.sin((time - .32) * 8.5) * .07);
   }
 
   function setCommonUniforms(program, uniforms, t, faceLight, speed, awakening, globalWake) {
@@ -311,7 +328,8 @@ if (gl) {
 
     const rawVx = (state.target.x - state.lastTarget.x) / Math.max(dt, .001);
     const rawVy = (state.target.y - state.lastTarget.y) / Math.max(dt, .001);
-    state.lastTarget.x = state.target.x; state.lastTarget.y = state.target.y;
+    state.lastTarget.x = state.target.x;
+    state.lastTarget.y = state.target.y;
     const velocityEase = 1 - Math.pow(.002, dt);
     state.velocity.x += (rawVx - state.velocity.x) * velocityEase;
     state.velocity.y += (rawVy - state.velocity.y) * velocityEase;
@@ -339,18 +357,18 @@ if (gl) {
     const faceLight = lanternLightAt(facePoint, aspect) * state.intro;
     const speed = Math.hypot(state.velocity.x * aspect, state.velocity.y);
     const lightImpact = faceLight - state.previousFaceLight;
-    if (!reducedMotion && lightImpact > .040 && speed > .18) {
-      state.shock = Math.max(state.shock, Math.min(1, lightImpact * 4.8 + speed * .22));
-      state.pinPulse = Math.max(state.pinPulse, Math.min(1, lightImpact * 3.6 + speed * .12));
+    if (!reducedMotion && lightImpact > .035 && speed > .16) {
+      state.shock = Math.max(state.shock, Math.min(1, lightImpact * 5.2 + speed * .25));
+      state.pinPulse = Math.max(state.pinPulse, Math.min(1, lightImpact * 4.0 + speed * .15));
     }
     state.previousFaceLight = faceLight;
-    state.shock *= Math.exp(-3.0 * dt);
-    state.pinPulse *= Math.exp(-7.0 * dt);
+    state.shock *= Math.exp(-2.8 * dt);
+    state.pinPulse *= Math.exp(-7.4 * dt);
 
     state.awakeningCooldown = Math.max(0, state.awakeningCooldown - dt);
-    if (!reducedMotion && state.wakes[8] > .28 && state.previousFaceWake <= .28 && state.awakeningCooldown <= 0) {
+    if (!reducedMotion && state.wakes[8] > .24 && state.previousFaceWake <= .24 && state.awakeningCooldown <= 0) {
       state.awakeningClock = 0;
-      state.awakeningCooldown = 1.45;
+      state.awakeningCooldown = 1.65;
     }
     state.previousFaceWake = state.wakes[8];
     state.awakeningClock += dt;
@@ -373,15 +391,28 @@ if (gl) {
       gl.enable(gl.BLEND);
       gl.blendEquation(gl.FUNC_ADD);
       gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-      gl.bindVertexArray(meshVao);
-      setCommonUniforms(meshProgram, meshUniforms, t, faceLight, speed, awakening, globalWake);
-      for (const pass of [0, 1, 2]) {
-        gl.uniform1f(meshUniforms.uPass, pass);
-        gl.drawElements(gl.TRIANGLES, meshIndexCount, gl.UNSIGNED_SHORT, 0);
+      gl.bindVertexArray(puppetVao);
+      setCommonUniforms(puppetProgram, puppetUniforms, t, faceLight, speed, awakening, globalWake);
+
+      // Shadows first. Then back-to-front paper edges and painted surfaces.
+      for (const pass of [0, 1]) {
+        gl.uniform1f(puppetUniforms.uPass, pass);
+        for (let part = 0; part < 9; part += 1) {
+          gl.uniform1i(puppetUniforms.uPart, part);
+          gl.drawElements(gl.TRIANGLES, puppetIndexCount, gl.UNSIGNED_SHORT, 0);
+        }
+      }
+      const drawOrder = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+      for (const part of drawOrder) {
+        gl.uniform1i(puppetUniforms.uPart, part);
+        for (const pass of [2, 3]) {
+          gl.uniform1f(puppetUniforms.uPass, pass);
+          gl.drawElements(gl.TRIANGLES, puppetIndexCount, gl.UNSIGNED_SHORT, 0);
+        }
       }
       gl.bindVertexArray(null);
     }
-    requestAnimationFrame(render);
+    if (!freezeFrame) requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
 }
