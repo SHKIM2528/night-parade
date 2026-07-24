@@ -1,0 +1,15 @@
+/* Gate 02 V03 — real artwork hotfix. */
+#scrollScene {
+  background: #d8ceb2;
+}
+
+.scroll-fallback {
+  background:
+    linear-gradient(90deg, rgba(12,20,21,.16), transparent 10%, transparent 90%, rgba(12,20,21,.16)),
+    url("https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Hyakki_Yako_no_Zu_by_Tosa_Mitsuoki-_left_half.jpg/3840px-Hyakki_Yako_no_Zu_by_Tosa_Mitsuoki-_left_half.jpg") 72% 50% / auto 100% no-repeat,
+    #d8ceb2;
+}
+
+.experience.is-unrolling #scrollScene {
+  opacity: 1;
+}
