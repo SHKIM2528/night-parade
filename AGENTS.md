@@ -8,39 +8,27 @@ NIGHT PARADE — an immersive interactive handscroll.
 
 1. Work on one visual gate only.
 2. Do not implement the full site from a concept summary.
-3. Do not add libraries, fallbacks, debug panels, backend, or optimization unless the active gate requires them.
+3. Do not add libraries, backend, audio, particles, or unrelated page sections unless the active gate requires them.
 4. Visual approval comes before architecture expansion.
 5. Never replace source artwork with generated approximations without explicit approval.
-6. Preserve source/license records.
+6. Preserve source and license records.
 7. Stop after producing the exact artifacts requested by the active gate.
 
 ## Active gate
 
-`docs/gates/GATE_01_V05_ARTICULATION.md`
+`docs/gates/GATE_01_V06_CUTOUT_PUPPET.md`
 
 Only improve the full-viewport green-monkey lantern scene.
 
-Do not add:
-
-- more creatures;
-- horizontal scroll navigation;
-- audio;
-- backend or saved seals;
-- framework migrations;
-- generic particle effects;
-- unrelated landing-page sections.
-
 ## Visual priority
 
-The light/dark boundary must read immediately:
+- light = untouched historical image;
+- dark = nine visibly articulated paper parts;
+- face, head, fur, arm, robe, torso, legs, and bag must not move as one lenticular sheet;
+- use only the original painted eyes;
+- a fast light pass must produce readable recoil;
+- every raised part must collapse exactly into the scan under light;
+- upper-left marker must show `GATE 01 · V06 · WEBGL2-CUTOUT`;
+- no duplicated edge, hard rectangular crop, black bar, or low-resolution mask breakup.
 
-- light = unchanged historical image;
-- dark = visibly articulated creature lifted from the paper;
-- use the original painted eyes only; never draw duplicate synthetic pupils;
-- face, head, fur, arm, robe, torso, jaw, and breathing must not move as one blended lenticular surface;
-- a fast light pass produces a readable recoil and paper-tension ripple;
-- light collapses the mesh precisely into the source painting;
-- every review recording must show the exact gate and renderer in the upper-left;
-- no rigid whole-character sticker, duplicated edge, black bars, or low-resolution mask breakup.
-
-The full scroll is reserved for `UNROLL` after V05 passes.
+The full scroll is reserved for `UNROLL` after this gate passes.
